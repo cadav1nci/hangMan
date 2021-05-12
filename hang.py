@@ -6,15 +6,17 @@ import os
 class Hangman: 
     def __init__(self): 
         print("****************************"+"\n")
-        print("Welcome to the Hangman Game")
+        print("Welcome to the Hangman Game V1.0")
         print("\n"+"****************************")
-        time.sleep(3.6)
+        time.sleep(2.1)
         os.system("cls")
         self.win = False
+        self.lost = False
+        self.toguess = self.load()
         self.lives = 0
-        # self.level = int(input("Please choose a difficulty:\n-1 for easy\n-2 for medium\n-3 for hard\n "))
-        # self.setLives(self.level)
-        self.word = [i for i in self.load() if i!="\n"]
+        self.level = int(input("Please choose a difficulty:\n-1 for easy\n-2 for medium\n-3 for hard\n "))
+        self.setLives(self.level)
+        self.word = [i for i in self.toguess if i!="\n"]
         self.wordArray = [" - " for i in range(len(self.word)) if i!="\n"]
         self.state =""
         self.state = self.state.join(self.wordArray)
@@ -31,7 +33,7 @@ class Hangman:
 
     def load(self):
         words = []
-        with open("./archivos/data.txt","r", encoding="utf-8") as f:
+        with open("./data.txt","r", encoding="utf-8") as f:
             for line in f:
                 s = unidecode.unidecode(line)
                 words.append(s.lower())
@@ -45,17 +47,17 @@ class Hangman:
                 self.state =""
                 self.state = self.state.join(self.wordArray)
         self.lives = self.lives - 1
+        if self.lives == 0:
+            self.lost = True
 
-        # if self.lives == 0:
-        #     print("YOU LOST")
+       
             
         if " - " not in self.wordArray:
-            print("YOU WON YAYYYYYYYYY")
             self.win = True
     
     def play(self):
-        while not self.win:
-            # print(f'You got {self.lives} lives left')    
+        while True:
+            print(f'You got {self.lives} lives left')    
             print("Guess the word")
             print()
             print(self.state)
@@ -63,7 +65,24 @@ class Hangman:
             a = input("Type a letter: ")
             self.guess(a)
             os.system("cls")
-        # print("YOU WON")
+            if(self.win):
+                print("\nCongratulations you won, the word was "+self.state+"\n")
+                time.sleep(3.6)
+                os.system("cls")
+                break
+
+            if(self.lost):
+                word = self.state.join(self.word)
+                print("\nSorry you ran outta lives and lost, the word was: ")
+                print(self.toguess)
+                time.sleep(3.6)
+                os.system("cls")
+                break
+            
+        print("*"*30)
+        print("\nGAME OVER THANKS FOR PLAYING \nDeveloped by www.cadavinci.com\n\n")
+        print("*"*30+"\n")
+        
     
     
 

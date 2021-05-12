@@ -1,0 +1,6 @@
+camion
+perro
+gato
+manzana
+fruta
+agua
